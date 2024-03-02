@@ -32,13 +32,25 @@ transform = Transform3D(-0.866025, -0.433013, 0.25, 0, 0.5, 0.866025, -0.5, 0.75
 shadow_enabled = true
 
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -2.50326e-08, 1, 0, -1, -2.50326e-08, 0, 9.23792, 0)
+transform = Transform3D(1, 0, 0, 0, -2.50326e-08, 1, 0, -1, -2.50326e-08, 2.08165e-12, 9.5, 2.08165e-12)
 
 [node name="TableTop" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_y32nr")
 
 [node name="Card1" parent="." instance=ExtResource("1_7acmb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 0.1, 3.25)
 
 [node name="Card2" parent="." instance=ExtResource("1_7acmb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.27275, 0.1, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 0.1, 3.25)
+
+[node name="Card3" parent="." node_paths=PackedStringArray("face_mesh") instance=ExtResource("1_7acmb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.1, 3.25)
+face_mesh = NodePath("../Card1/Front")
+
+[node name="Card4" parent="." node_paths=PackedStringArray("face_mesh") instance=ExtResource("1_7acmb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 0.1, 3.25)
+face_mesh = NodePath("../Card2/Front")
+
+[node name="Card5" parent="." node_paths=PackedStringArray("face_mesh") instance=ExtResource("1_7acmb")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 0.1, 3.25)
+face_mesh = NodePath("../Card1/Front")
