@@ -11,37 +11,28 @@ static var half_flip_seconds := 0.2
 static var half_flip_z_angle_delta := -90.0
 static var full_flip_z_angle_delta := -180.0
 
+static var half_toss_seconds := 0.25
+static var half_toss_y_angle_delta := -179.9
+static var full_toss_y_angle_delta := -360.0
+
 static var rotate_before_slide_seconds := 0.5
 static var slide_move_seconds := 1.0
 static var straighten_seconds := 0.5
 
 
 func _ready():
-	face_material = face_mesh.get_active_material(0)
-	
-	#TODO REMOVE THIS AND SETUP EXTERNALLY
-	var rank := randi() % 13
-	var suit := randi() % 4
-	setup(rank, suit)
-
-
-func _process(_delta):
-	if Input.is_action_just_pressed("TEMP_action"):
-		flip(func():
-			slide_to(Vector3(0, 0, -3.25), func():
-				straighten(func(): pass)
-			)
-		)
+	pass
 
 
 func setup(rank: int, suit: int):
+	face_material = face_mesh.get_active_material(0)
 	flip_pivot.rotation_degrees.z = -180.0
 	
 	face_material.uv1_offset.x = 1.0 / 14 * rank
 	face_material.uv1_offset.y = 1.0 / 4 * suit
 
 
-func flip(callback: Callable):
+func flip(start_delay_seconds: float, callback: Callable):
 	if flip_pivot.rotation_degrees.z <= -360.0:
 		flip_pivot.rotation_degrees.z += 360.0
 	
@@ -52,8 +43,8 @@ func flip(callback: Callable):
 	
 	var flip_tween := create_tween()
 	flip_tween.set_parallel(true)
-	flip_tween.tween_property(flip_pivot, "rotation_degrees", pivot_halfway_rotation_degrees, half_flip_seconds)
-	flip_tween.tween_property(self, "position", start_position + half_flip_position_offset, half_flip_seconds)
+	flip_tween.tween_property(flip_pivot, "rotation_degrees", pivot_halfway_rotation_degrees, half_flip_seconds).set_delay(start_delay_seconds)
+	flip_tween.tween_property(self, "position", start_position + half_flip_position_offset, half_flip_seconds).set_delay(start_delay_seconds)
 	flip_tween.chain()
 	flip_tween.tween_property(flip_pivot, "rotation_degrees", pivot_final_rotation_degrees, half_flip_seconds)
 	flip_tween.tween_property(self, "position", start_position, half_flip_seconds)
@@ -72,6 +63,24 @@ func slide_to(destination: Vector3, callback: Callable):
 	slide_tween.tween_property(self, "position", destination, slide_move_seconds).set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_QUAD)
 	slide_tween.chain()
 	slide_tween.tween_callback(callback)
+
+
+func toss_to(destination: Vector3, start_delay_seconds: float, callback: Callable):
+	var final_position_offset := destination - global_position
+	var halfway_position := global_position + 0.5 * final_position_offset
+	
+	var halfway_rotation_degrees = rotation_degrees + Vector3(0, half_toss_y_angle_delta, 0)
+	var final_rotation_degrees = rotation_degrees + Vector3(0, full_toss_y_angle_delta, 0)
+
+	var toss_tween := create_tween()
+	toss_tween.set_parallel(true)
+	toss_tween.tween_property(self, "rotation_degrees", halfway_rotation_degrees, half_toss_seconds).set_delay(start_delay_seconds)
+	toss_tween.tween_property(self, "global_position", halfway_position, half_toss_seconds).set_delay(start_delay_seconds)
+	toss_tween.chain()
+	toss_tween.tween_property(self, "rotation_degrees", final_rotation_degrees, half_toss_seconds)
+	toss_tween.tween_property(self, "global_position", destination, half_toss_seconds)
+	toss_tween.chain()
+	toss_tween.tween_callback(callback)
 
 
 func straighten(callback: Callable):
