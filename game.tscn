@@ -1,7 +1,8 @@
-[gd_scene load_steps=8 format=3 uid="uid://u44he82bojkb"]
+[gd_scene load_steps=9 format=3 uid="uid://u44he82bojkb"]
 
 [ext_resource type="PackedScene" uid="uid://2hvjs54mv15j" path="res://card.tscn" id="1_7acmb"]
 [ext_resource type="Script" path="res://dealer.gd" id="1_wbkd3"]
+[ext_resource type="Script" path="res://game-manager.gd" id="3_1okil"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qu0ad"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -39,7 +40,15 @@ transform = Transform3D(1, 0, 0, 0, -2.50326e-08, 1, 0, -1, -2.50326e-08, 2.0816
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.1, 2.08165e-12)
 mesh = SubResource("PlaneMesh_y32nr")
 
-[node name="Dealer" type="Node3D" parent="."]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("dealer")]
+script = ExtResource("3_1okil")
+dealer = NodePath("../Dealer")
+
+[node name="Dealer" type="Node3D" parent="." node_paths=PackedStringArray("deck_card")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -3.25)
 script = ExtResource("1_wbkd3")
 card_scene = ExtResource("1_7acmb")
+deck_card = NodePath("DeckCard")
+
+[node name="DeckCard" parent="Dealer" instance=ExtResource("1_7acmb")]
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, -0.05, 2.08165e-12)

@@ -20,10 +20,6 @@ static var slide_move_seconds := 1.0
 static var straighten_seconds := 0.5
 
 
-func _ready():
-	pass
-
-
 func setup(rank: int, suit: int):
 	face_material = face_mesh.get_active_material(0)
 	flip_pivot.rotation_degrees.z = -180.0
