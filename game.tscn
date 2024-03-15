@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://u44he82bojkb"]
+[gd_scene load_steps=12 format=3 uid="uid://u44he82bojkb"]
 
 [ext_resource type="PackedScene" uid="uid://2hvjs54mv15j" path="res://card.tscn" id="1_7acmb"]
 [ext_resource type="Script" path="res://dealer.gd" id="1_wbkd3"]
 [ext_resource type="Script" path="res://game-manager.gd" id="3_1okil"]
+[ext_resource type="Texture2D" uid="uid://bvbdfnwi7viy7" path="res://cards.png" id="4_lax44"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qu0ad"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -24,6 +25,16 @@ albedo_color = Color(0.239216, 0.690196, 0.215686, 1)
 material = SubResource("StandardMaterial3D_ew7as")
 size = Vector2(30, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wde2m"]
+albedo_texture = ExtResource("4_lax44")
+uv1_scale = Vector3(0.071, 0.25, 1)
+uv1_offset = Vector3(0.929, 0.25, 2.08165e-12)
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jivdo"]
+material = SubResource("StandardMaterial3D_wde2m")
+size = Vector2(2.5, 3.5)
+
 [node name="Game" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -44,11 +55,13 @@ mesh = SubResource("PlaneMesh_y32nr")
 script = ExtResource("3_1okil")
 dealer = NodePath("../Dealer")
 
-[node name="Dealer" type="Node3D" parent="." node_paths=PackedStringArray("deck_card")]
+[node name="Dealer" type="Node3D" parent="." node_paths=PackedStringArray("game_manager")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -3.25)
 script = ExtResource("1_wbkd3")
 card_scene = ExtResource("1_7acmb")
-deck_card = NodePath("DeckCard")
+game_manager = NodePath("../GameManager")
 
-[node name="DeckCard" parent="Dealer" instance=ExtResource("1_7acmb")]
+[node name="DeckCard" type="MeshInstance3D" parent="Dealer"]
 transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, -0.05, 2.08165e-12)
+mesh = SubResource("PlaneMesh_jivdo")
+skeleton = NodePath("../..")

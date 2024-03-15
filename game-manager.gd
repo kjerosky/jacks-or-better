@@ -9,12 +9,12 @@ enum GameState {
 	DEALING_HAND,
 	START_FLIPPING_CARDS,
 	FLIPPING_CARDS,
-	HALT,
+	PLAYER_IS_CHOOSING_CARDS,
 }
 var state: GameState
 
 const ALL_CARD_INDICES : Array[int] = [0, 1, 2, 3, 4]
-
+var clicked_cards_statuses : Array[bool] = [false, false, false, false, false]
 
 func _ready():
 	state = GameState.WAIT_FOR_START
@@ -42,6 +42,17 @@ func process_state():
 		
 		GameState.START_FLIPPING_CARDS:
 			dealer.flip_cards(ALL_CARD_INDICES, func():
-				state = GameState.HALT
+				state = GameState.PLAYER_IS_CHOOSING_CARDS
 			)
 			state = GameState.FLIPPING_CARDS
+		
+		GameState.PLAYER_IS_CHOOSING_CARDS:
+			if Input.is_action_just_pressed("ChooseCard"):
+				var mouse_position := get_viewport().get_mouse_position()
+
+
+func _on_card_clicked(card_index: int):
+	if state != GameState.PLAYER_IS_CHOOSING_CARDS:
+		return
+	
+	clicked_cards_statuses[card_index] = not clicked_cards_statuses[card_index]

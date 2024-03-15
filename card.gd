@@ -4,7 +4,7 @@ extends Node3D
 @export var flip_pivot : Node3D
 @export var face_mesh : MeshInstance3D
 
-var face_material : StandardMaterial3D
+signal clicked(card_index: int)
 
 static var half_flip_position_offset := Vector3(0, 2, 0)
 static var half_flip_seconds := 0.2
@@ -19,13 +19,19 @@ static var rotate_before_slide_seconds := 0.5
 static var slide_move_seconds := 1.0
 static var straighten_seconds := 0.5
 
+var face_material : StandardMaterial3D
 
-func setup(rank: int, suit: int):
+var index : int
+
+
+func setup(rank: int, suit: int, index: int):
 	face_material = face_mesh.get_active_material(0)
-	flip_pivot.rotation_degrees.z = -180.0
-	
 	face_material.uv1_offset.x = 1.0 / 14 * rank
 	face_material.uv1_offset.y = 1.0 / 4 * suit
+	
+	flip_pivot.rotation_degrees.z = -180.0
+	
+	self.index = index
 
 
 func flip(start_delay_seconds: float, callback: Callable):
@@ -83,3 +89,12 @@ func straighten(callback: Callable):
 	var straighten_tween := create_tween()
 	straighten_tween.tween_property(self, "quaternion", Quaternion.IDENTITY, straighten_seconds)
 	straighten_tween.tween_callback(callback)
+
+
+func _on_collider_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int):
+	var mouse_event = event as InputEventMouseButton
+	if mouse_event == null:
+		return
+	
+	if mouse_event.pressed and mouse_event.button_index == 1:
+		clicked.emit(index)

@@ -2,7 +2,7 @@ class_name Dealer
 extends Node3D
 
 @export var card_scene : PackedScene
-@export var deck_card : Card
+@export var game_manager : GameManager
 
 var cards : Array[Card] = []
 
@@ -10,12 +10,10 @@ var cards_exist := false
 
 
 func _ready():
-	deck_card.setup(13, 0)
-	
 	for i in 5:
 		var new_card : Card = card_scene.instantiate()
 		#TODO SETUP CORRECTLY!
-		new_card.setup(i % 13, i % 4)
+		new_card.setup(i % 13, i % 4, i)
 		new_card.position = position
 		cards.push_back(new_card)
 
@@ -25,6 +23,7 @@ func _process(_delta):
 		cards_exist = true
 		for i in cards.size():
 			var card := cards[i]
+			card.clicked.connect(game_manager._on_card_clicked)
 			get_tree().root.add_child(card)
 
 
