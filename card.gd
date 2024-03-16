@@ -21,17 +21,23 @@ static var straighten_seconds := 0.5
 
 var face_material : StandardMaterial3D
 
+var attributes : Dictionary
 var index : int
 
 
-func setup(rank: int, suit: int, card_index: int):
+func setup(card_index: int):
+	index = card_index
+	flip_pivot.rotation_degrees.z = -180.0
+
+
+func set_attributes(card_attributes: Dictionary):
+	attributes = card_attributes
+	var rank = attributes["rank"]
+	var suit = attributes["suit"]
+	
 	face_material = face_mesh.get_active_material(0)
 	face_material.uv1_offset.x = 1.0 / 14 * rank
 	face_material.uv1_offset.y = 1.0 / 4 * suit
-	
-	flip_pivot.rotation_degrees.z = -180.0
-	
-	index = card_index
 
 
 func flip(start_delay_seconds: float, callback: Callable):

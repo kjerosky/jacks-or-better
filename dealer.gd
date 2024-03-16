@@ -3,6 +3,7 @@ extends Node3D
 
 @export var card_scene : PackedScene
 @export var game_manager : GameManager
+@export var deck : Deck
 
 var cards : Array[Card] = []
 
@@ -10,10 +11,10 @@ var cards_exist := false
 
 
 func _ready():
+	deck.initialize()
 	for i in 5:
 		var new_card : Card = card_scene.instantiate()
-		#TODO SETUP CORRECTLY!
-		new_card.setup(i % 13, i % 4, i)
+		new_card.setup(i)
 		new_card.global_position = global_position
 		cards.push_back(new_card)
 
@@ -34,6 +35,9 @@ func deal_cards(card_indices: Array[int], last_card_callback: Callable):
 		var card = cards[i]
 		if card_index == card_indices.size() - 1:
 			card_callback = last_card_callback
+		
+		var card_attributes := deck.draw_card()
+		card.set_attributes(card_attributes)
 		
 		card.global_position.y = global_position.y
 		card.toss_to(Vector3(i * 3.25 - 6.5, 0, 3), card_index * 0.3, card_callback)
@@ -62,6 +66,7 @@ func return_cards_to_deck(card_indices: Array[int], last_card_callback: Callable
 		var destination := Vector3(global_position.x, card.global_position.y, global_position.z)
 		card.flip(0.1 * card_index, func():
 			card.slide_to(destination, func():
+				deck.return_card(card.attributes)
 				card.straighten(card_callback)
 			)
 		)
