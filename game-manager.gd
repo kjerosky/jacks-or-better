@@ -10,6 +10,12 @@ enum GameState {
 	START_FLIPPING_CARDS,
 	FLIPPING_CARDS,
 	PLAYER_IS_CHOOSING_CARDS,
+	DISCARDING_CARDS,
+	START_RECEIVING_REPLACEMENT_CARDS,
+	RECEIVING_REPLACEMENT_CARDS,
+	START_REVEALING_REPLACEMENT_CARDS,
+	REVEALING_REPLACEMENT_CARDS,
+	DISPLAYING_HAND_RESULT,
 }
 var state: GameState
 
@@ -35,20 +41,61 @@ func attempt_transition():
 func process_state():
 	match state:
 		GameState.START_DEALING_HAND:
+			state = GameState.DEALING_HAND
+			
+			for i in clicked_cards_statuses.size():
+				clicked_cards_statuses[i] = false
+			
 			dealer.deal_cards(ALL_CARD_INDICES, func():
 				state = GameState.START_FLIPPING_CARDS
 			)
-			state = GameState.DEALING_HAND
 		
 		GameState.START_FLIPPING_CARDS:
+			state = GameState.FLIPPING_CARDS
 			dealer.flip_cards(ALL_CARD_INDICES, func():
 				state = GameState.PLAYER_IS_CHOOSING_CARDS
 			)
-			state = GameState.FLIPPING_CARDS
 		
 		GameState.PLAYER_IS_CHOOSING_CARDS:
-			if Input.is_action_just_pressed("ChooseCard"):
-				var mouse_position := get_viewport().get_mouse_position()
+			if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+				state = GameState.DISCARDING_CARDS
+				
+				var discarded_card_indices : Array[int] = []
+				for i in clicked_cards_statuses.size():
+					if clicked_cards_statuses[i]:
+						discarded_card_indices.push_back(i)
+				
+				if discarded_card_indices.is_empty():
+					state = GameState.DISPLAYING_HAND_RESULT
+				else:
+					dealer.return_cards_to_deck(discarded_card_indices, func():
+						state = GameState.START_RECEIVING_REPLACEMENT_CARDS
+					)
+		
+		GameState.START_RECEIVING_REPLACEMENT_CARDS:
+			state = GameState.RECEIVING_REPLACEMENT_CARDS
+			
+			var received_card_indices : Array[int] = []
+			for i in clicked_cards_statuses.size():
+				if clicked_cards_statuses[i]:
+					received_card_indices.push_back(i)
+
+			dealer.deal_cards(received_card_indices, func():
+				state = GameState.START_REVEALING_REPLACEMENT_CARDS
+			)
+		
+		GameState.START_REVEALING_REPLACEMENT_CARDS:
+			state = GameState.REVEALING_REPLACEMENT_CARDS
+			
+			var received_card_indices : Array[int] = []
+			for i in clicked_cards_statuses.size():
+				if clicked_cards_statuses[i]:
+					received_card_indices.push_back(i)
+			
+			dealer.flip_cards(received_card_indices, func():
+				state = GameState.DISPLAYING_HAND_RESULT
+			)
+
 
 
 func _on_card_clicked(card_index: int):

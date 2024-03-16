@@ -24,14 +24,14 @@ var face_material : StandardMaterial3D
 var index : int
 
 
-func setup(rank: int, suit: int, index: int):
+func setup(rank: int, suit: int, card_index: int):
 	face_material = face_mesh.get_active_material(0)
 	face_material.uv1_offset.x = 1.0 / 14 * rank
 	face_material.uv1_offset.y = 1.0 / 4 * suit
 	
 	flip_pivot.rotation_degrees.z = -180.0
 	
-	self.index = index
+	index = card_index
 
 
 func flip(start_delay_seconds: float, callback: Callable):
@@ -91,7 +91,7 @@ func straighten(callback: Callable):
 	straighten_tween.tween_callback(callback)
 
 
-func _on_collider_input_event(camera: Node, event: InputEvent, position: Vector3, normal: Vector3, shape_idx: int):
+func _on_collider_input_event(_camera: Node, event: InputEvent, _position: Vector3, _normal: Vector3, _shape_idx: int):
 	var mouse_event = event as InputEventMouseButton
 	if mouse_event == null:
 		return
