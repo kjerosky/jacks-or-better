@@ -1,0 +1,29 @@
+[gd_scene load_steps=7 format=3 uid="uid://ddgx78yyinptx"]
+
+[ext_resource type="Script" path="res://dealer.gd" id="1_fv3mm"]
+[ext_resource type="PackedScene" uid="uid://2hvjs54mv15j" path="res://card.tscn" id="2_sa2sf"]
+[ext_resource type="Texture2D" uid="uid://bvbdfnwi7viy7" path="res://cards.png" id="3_tpftm"]
+[ext_resource type="Script" path="res://deck.gd" id="4_xgqof"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wde2m"]
+albedo_texture = ExtResource("3_tpftm")
+uv1_scale = Vector3(0.071, 0.25, 1)
+uv1_offset = Vector3(0.929, 0.25, 2.08165e-12)
+texture_filter = 1
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jivdo"]
+material = SubResource("StandardMaterial3D_wde2m")
+size = Vector2(2.5, 3.5)
+
+[node name="Dealer" type="Node3D" node_paths=PackedStringArray("deck")]
+script = ExtResource("1_fv3mm")
+card_scene = ExtResource("2_sa2sf")
+deck = NodePath("Deck")
+
+[node name="DeckVisual" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -3.48787e-16, -3.48787e-16, 3.48787e-16, 1, 2.08165e-12, -0.05, 2.08165e-12)
+mesh = SubResource("PlaneMesh_jivdo")
+skeleton = NodePath("../..")
+
+[node name="Deck" type="Node" parent="."]
+script = ExtResource("4_xgqof")
