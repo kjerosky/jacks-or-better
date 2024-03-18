@@ -4,6 +4,7 @@ extends Node3D
 @export var card_scene : PackedScene
 @export var game_manager : GameManager
 @export var deck : Deck
+@export var dealt_card_positions: Array[Marker3D]
 
 var cards : Array[Card] = []
 
@@ -40,7 +41,8 @@ func deal_cards(card_indices: Array[int], last_card_callback: Callable):
 		card.set_attributes(card_attributes)
 		
 		card.global_position.y = global_position.y
-		card.toss_to(Vector3(i * 3.25 - 6.5, 0, 3), card_index * 0.3, card_callback)
+		var final_tossed_position = dealt_card_positions[i].position
+		card.toss_to(final_tossed_position, card_index * 0.3, card_callback)
 
 
 func flip_cards(card_indices: Array[int], last_card_callback: Callable):
