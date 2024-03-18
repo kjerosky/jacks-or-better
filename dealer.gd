@@ -8,25 +8,23 @@ extends Node3D
 
 var cards : Array[Card] = []
 
-var cards_exist := false
-
 
 func _ready():
 	deck.initialize()
+	
 	for i in 5:
 		var new_card : Card = card_scene.instantiate()
-		new_card.setup(i)
-		new_card.global_position = global_position
+		new_card.clicked.connect(game_manager._on_card_clicked)
 		cards.push_back(new_card)
+		get_tree().root.add_child.call_deferred(new_card)
+	
+	setup_cards.call_deferred()
 
 
-func _process(_delta):
-	if not cards_exist:
-		cards_exist = true
-		for i in cards.size():
-			var card := cards[i]
-			card.clicked.connect(game_manager._on_card_clicked)
-			get_tree().root.add_child(card)
+func setup_cards():
+	for i in cards.size():
+		cards[i].setup(i)
+		cards[i].global_position = global_position
 
 
 func deal_cards(card_indices: Array[int], last_card_callback: Callable):
