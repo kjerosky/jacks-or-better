@@ -72,3 +72,7 @@ func return_cards_to_deck(card_indices: Array[int], last_card_callback: Callable
 				card.straighten(card_callback)
 			)
 		)
+
+
+func determine_hand_rank() -> HandRank.Rank:
+	return HandRank.determine_rank(cards)

@@ -57,6 +57,7 @@ func process_state():
 		GameState.START_FLIPPING_CARDS:
 			state = GameState.FLIPPING_CARDS
 			dealer.flip_cards(ALL_CARD_INDICES, func():
+				print(HandRank.rank_to_name(dealer.determine_hand_rank()))
 				state = GameState.PLAYER_IS_CHOOSING_CARDS
 			)
 		
@@ -100,6 +101,7 @@ func process_state():
 					received_card_indices.push_back(i)
 			
 			dealer.flip_cards(received_card_indices, func():
+				print(HandRank.rank_to_name(dealer.determine_hand_rank()))
 				state = GameState.DISPLAYING_HAND_RESULT
 			)
 

@@ -17,7 +17,8 @@ static var full_toss_y_angle_delta := -360.0
 
 static var rotate_before_slide_seconds := 0.5
 static var slide_move_seconds := 1.0
-static var straighten_seconds := 0.5
+static var straighten_seconds := 0.25
+static var post_straighten_delay_seconds := 0.25
 
 var face_material : StandardMaterial3D
 
@@ -94,7 +95,7 @@ func toss_to(destination: Vector3, start_delay_seconds: float, callback: Callabl
 func straighten(callback: Callable):
 	var straighten_tween := create_tween()
 	straighten_tween.tween_property(self, "quaternion", Quaternion.IDENTITY, straighten_seconds)
-	straighten_tween.tween_callback(callback)
+	straighten_tween.tween_callback(callback).set_delay(post_straighten_delay_seconds)
 
 
 func _on_collider_input_event(_camera: Node, event: InputEvent, _position: Vector3, _normal: Vector3, _shape_idx: int):
