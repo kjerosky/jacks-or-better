@@ -1,7 +1,8 @@
-[gd_scene load_steps=10 format=3 uid="uid://u44he82bojkb"]
+[gd_scene load_steps=11 format=3 uid="uid://u44he82bojkb"]
 
 [ext_resource type="PackedScene" uid="uid://ddgx78yyinptx" path="res://dealer.tscn" id="2_4s3sx"]
 [ext_resource type="Script" path="res://game-manager.gd" id="3_1okil"]
+[ext_resource type="Texture2D" uid="uid://cwhckho6mqfgu" path="res://held-label.png" id="3_i5a3g"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_qu0ad"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -24,7 +25,8 @@ material = SubResource("StandardMaterial3D_ew7as")
 size = Vector2(30, 20)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ely8"]
-albedo_color = Color(1, 0, 1, 1)
+albedo_texture = ExtResource("3_i5a3g")
+texture_filter = 0
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_vjafj"]
 material = SubResource("StandardMaterial3D_1ely8")
@@ -62,7 +64,7 @@ dealt_card_positions = [NodePath("../DealtCardPositions/DealtCardPosition1"), No
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 2.08165e-12, 3)
 
 [node name="HoldLabel1" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition1"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 0.65)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_vjafj")
 
@@ -70,7 +72,7 @@ mesh = SubResource("PlaneMesh_vjafj")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 2.08165e-12, 3)
 
 [node name="HoldLabel2" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 0.65)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_vjafj")
 skeleton = NodePath("../../DealtCardPosition1")
@@ -79,7 +81,7 @@ skeleton = NodePath("../../DealtCardPosition1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
 
 [node name="HoldLabel3" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition3"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 0.65)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_vjafj")
 skeleton = NodePath("../../DealtCardPosition1")
@@ -88,7 +90,7 @@ skeleton = NodePath("../../DealtCardPosition1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 2.08165e-12, 3)
 
 [node name="HoldLabel4" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition4"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 0.65)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_vjafj")
 skeleton = NodePath("../../DealtCardPosition1")
@@ -97,7 +99,7 @@ skeleton = NodePath("../../DealtCardPosition1")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2.08165e-12, 3)
 
 [node name="HoldLabel5" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition5"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 0.65)
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_vjafj")
 skeleton = NodePath("../../DealtCardPosition1")
