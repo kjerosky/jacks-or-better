@@ -2,6 +2,7 @@ class_name GameManager
 extends Node
 
 @export var dealer: Dealer
+@export var hold_labels: Array[MeshInstance3D]
 
 enum GameState {
 	WAIT_FOR_START,
@@ -20,9 +21,12 @@ enum GameState {
 var state: GameState
 
 const ALL_CARD_INDICES : Array[int] = [0, 1, 2, 3, 4]
-var clicked_cards_statuses : Array[bool] = [false, false, false, false, false]
+var card_hold_statuses : Array[bool] = [false, false, false, false, false]
 
 func _ready():
+	for hold_label in hold_labels:
+		hold_label.visible = false
+	
 	state = GameState.WAIT_FOR_START
 
 
@@ -43,8 +47,8 @@ func process_state():
 		GameState.START_DEALING_HAND:
 			state = GameState.DEALING_HAND
 			
-			for i in clicked_cards_statuses.size():
-				clicked_cards_statuses[i] = false
+			for i in card_hold_statuses.size():
+				card_hold_statuses[i] = false
 			
 			dealer.deal_cards(ALL_CARD_INDICES, func():
 				state = GameState.START_FLIPPING_CARDS
@@ -60,9 +64,12 @@ func process_state():
 			if Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
 				state = GameState.DISCARDING_CARDS
 				
+				for hold_label in hold_labels:
+					hold_label.visible = false
+				
 				var discarded_card_indices : Array[int] = []
-				for i in clicked_cards_statuses.size():
-					if clicked_cards_statuses[i]:
+				for i in card_hold_statuses.size():
+					if not card_hold_statuses[i]:
 						discarded_card_indices.push_back(i)
 				
 				if discarded_card_indices.is_empty():
@@ -76,8 +83,8 @@ func process_state():
 			state = GameState.RECEIVING_REPLACEMENT_CARDS
 			
 			var received_card_indices : Array[int] = []
-			for i in clicked_cards_statuses.size():
-				if clicked_cards_statuses[i]:
+			for i in card_hold_statuses.size():
+				if not card_hold_statuses[i]:
 					received_card_indices.push_back(i)
 
 			dealer.deal_cards(received_card_indices, func():
@@ -88,8 +95,8 @@ func process_state():
 			state = GameState.REVEALING_REPLACEMENT_CARDS
 			
 			var received_card_indices : Array[int] = []
-			for i in clicked_cards_statuses.size():
-				if clicked_cards_statuses[i]:
+			for i in card_hold_statuses.size():
+				if not card_hold_statuses[i]:
 					received_card_indices.push_back(i)
 			
 			dealer.flip_cards(received_card_indices, func():
@@ -102,4 +109,5 @@ func _on_card_clicked(card_index: int):
 	if state != GameState.PLAYER_IS_CHOOSING_CARDS:
 		return
 	
-	clicked_cards_statuses[card_index] = not clicked_cards_statuses[card_index]
+	card_hold_statuses[card_index] = not card_hold_statuses[card_index]
+	hold_labels[card_index].visible = card_hold_statuses[card_index]

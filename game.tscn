@@ -1,4 +1,4 @@
-[gd_scene load_steps=8 format=3 uid="uid://u44he82bojkb"]
+[gd_scene load_steps=10 format=3 uid="uid://u44he82bojkb"]
 
 [ext_resource type="PackedScene" uid="uid://ddgx78yyinptx" path="res://dealer.tscn" id="2_4s3sx"]
 [ext_resource type="Script" path="res://game-manager.gd" id="3_1okil"]
@@ -23,6 +23,13 @@ albedo_color = Color(0.239216, 0.690196, 0.215686, 1)
 material = SubResource("StandardMaterial3D_ew7as")
 size = Vector2(30, 20)
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1ely8"]
+albedo_color = Color(1, 0, 1, 1)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_vjafj"]
+material = SubResource("StandardMaterial3D_1ely8")
+size = Vector2(2.75, 0.75)
+
 [node name="Game" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -39,9 +46,10 @@ transform = Transform3D(1, 0, 0, 0, -2.50326e-08, 1, 0, -1, -2.50326e-08, 2.0816
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, -0.1, 2.08165e-12)
 mesh = SubResource("PlaneMesh_y32nr")
 
-[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("dealer")]
+[node name="GameManager" type="Node" parent="." node_paths=PackedStringArray("dealer", "hold_labels")]
 script = ExtResource("3_1okil")
 dealer = NodePath("../Dealer")
+hold_labels = [NodePath("../DealtCardPositions/DealtCardPosition1/HoldLabel1"), NodePath("../DealtCardPositions/DealtCardPosition2/HoldLabel2"), NodePath("../DealtCardPositions/DealtCardPosition3/HoldLabel3"), NodePath("../DealtCardPositions/DealtCardPosition4/HoldLabel4"), NodePath("../DealtCardPositions/DealtCardPosition5/HoldLabel5")]
 
 [node name="Dealer" parent="." node_paths=PackedStringArray("game_manager", "dealt_card_positions") instance=ExtResource("2_4s3sx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, -3.25)
@@ -53,14 +61,43 @@ dealt_card_positions = [NodePath("../DealtCardPositions/DealtCardPosition1"), No
 [node name="DealtCardPosition1" type="Marker3D" parent="DealtCardPositions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 2.08165e-12, 3)
 
+[node name="HoldLabel1" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition1"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_vjafj")
+
 [node name="DealtCardPosition2" type="Marker3D" parent="DealtCardPositions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.25, 2.08165e-12, 3)
+
+[node name="HoldLabel2" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_vjafj")
+skeleton = NodePath("../../DealtCardPosition1")
 
 [node name="DealtCardPosition3" type="Marker3D" parent="DealtCardPositions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
 
+[node name="HoldLabel3" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition3"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_vjafj")
+skeleton = NodePath("../../DealtCardPosition1")
+
 [node name="DealtCardPosition4" type="Marker3D" parent="DealtCardPositions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3.25, 2.08165e-12, 3)
 
+[node name="HoldLabel4" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition4"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_vjafj")
+skeleton = NodePath("../../DealtCardPosition1")
+
 [node name="DealtCardPosition5" type="Marker3D" parent="DealtCardPositions"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2.08165e-12, 3)
+
+[node name="HoldLabel5" type="MeshInstance3D" parent="DealtCardPositions/DealtCardPosition5"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 0.05, 2.08165e-12)
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_vjafj")
+skeleton = NodePath("../../DealtCardPosition1")
