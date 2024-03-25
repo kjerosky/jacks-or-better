@@ -27,6 +27,10 @@ func setup_cards():
 		cards[i].global_position = global_position
 
 
+func shuffle_deck():
+	deck.shuffle()
+
+
 func deal_cards(card_indices: Array[int], last_card_callback: Callable):
 	var card_callback := func(): pass
 	for card_index in card_indices.size():

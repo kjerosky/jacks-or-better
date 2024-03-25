@@ -5,7 +5,7 @@ extends Node
 @export var hold_labels: Array[MeshInstance3D]
 
 enum GameState {
-	WAIT_FOR_START,
+	PLACING_BETS,
 	START_DEALING_HAND,
 	DEALING_HAND,
 	START_FLIPPING_CARDS,
@@ -23,33 +23,39 @@ var state: GameState
 const ALL_CARD_INDICES : Array[int] = [0, 1, 2, 3, 4]
 var card_hold_statuses : Array[bool] = [false, false, false, false, false]
 
+var is_first_round := true
+
+
 func _ready():
 	for hold_label in hold_labels:
 		hold_label.visible = false
 	
-	state = GameState.WAIT_FOR_START
+	state = GameState.PLACING_BETS
 
 
 func _process(_delta):
 	attempt_transition()
-	process_state()
 
 
 func attempt_transition():
 	match state:
-		GameState.WAIT_FOR_START:
+		GameState.PLACING_BETS:
 			if Input.is_action_just_pressed("TEMP_action"):
-				state = GameState.START_DEALING_HAND
-
-
-func process_state():
-	match state:
+				if is_first_round:
+					is_first_round = false
+					state = GameState.START_DEALING_HAND
+				else:
+					dealer.return_cards_to_deck(ALL_CARD_INDICES, func():
+						state = GameState.START_DEALING_HAND
+					)
+		
 		GameState.START_DEALING_HAND:
 			state = GameState.DEALING_HAND
 			
 			for i in card_hold_statuses.size():
 				card_hold_statuses[i] = false
 			
+			dealer.shuffle_deck()
 			dealer.deal_cards(ALL_CARD_INDICES, func():
 				state = GameState.START_FLIPPING_CARDS
 			)
@@ -104,7 +110,9 @@ func process_state():
 				print(HandRank.rank_to_name(dealer.determine_hand_rank()))
 				state = GameState.DISPLAYING_HAND_RESULT
 			)
-
+		
+		GameState.DISPLAYING_HAND_RESULT:
+			state = GameState.PLACING_BETS
 
 
 func _on_card_clicked(card_index: int):
